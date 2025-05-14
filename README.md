@@ -42,3 +42,38 @@ Estrategia implementada:
 - Las imágenes son datos críticos que no deben perderse
 - El acceso a disco es aceptable dada la naturaleza asíncrona
 - En producción, considerar almacenamiento distribuido (S3)
+
+##USO
+### 1. Clonar el Repositorio
+
+Para obtener el código fuente del proyecto, ejecute los siguientes comandos en la terminal:
+
+```bash
+git clone https://github.com/julianReyes-dev/Parcial1_SegundoCorte_Distribuidos.git
+```
+```bash
+cd Parcial1_SegundoCorte_Distribuidos
+```
+
+### 2. Correr el proyecto
+
+```bash
+docker-compose up -d --build
+```
+Esto creará:
+
+- 1 contenedor para RabbitMQ (con la interfaz de gestión en http://localhost:15672)
+- 1 contenedor para la API (en http://localhost:8000)
+- 3 réplicas de workers
+- 1 contenedor para el servicio de notificaciones
+
+### 3. Probar la funcionalidad
+
+Subir una imagen
+```bash
+curl -X POST -F "file=@image.jpg" http://localhost:8000/upload
+```
+Verificar el estado (use el id devuelto)
+```bash
+curl http://localhost:8000/status/id
+```
