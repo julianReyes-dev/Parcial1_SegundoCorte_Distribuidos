@@ -10,7 +10,6 @@ from .utils import save_upload_file
 
 app = FastAPI()
 
-# In-memory storage for demo purposes (in production, use a database)
 image_db: Dict[str, ImageMetadata] = {}
 
 class UploadResponse(BaseModel):
@@ -34,10 +33,9 @@ async def upload_image(file: UploadFile):
 
     image_id = str(uuid.uuid4())
     
-    # Save original file
     file_path = await save_upload_file(file, image_id)
     
-    # Store initial metadata
+    # Revisar metadata!
     image_db[image_id] = ImageMetadata(
         id=image_id,
         original_filename=file.filename,
@@ -46,7 +44,6 @@ async def upload_image(file: UploadFile):
         details={}
     )
     
-    # Send to processing queue
     await send_to_processing_queue(image_id)
     
     return UploadResponse(

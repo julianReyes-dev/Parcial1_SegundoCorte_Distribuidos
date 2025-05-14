@@ -11,15 +11,11 @@ async def on_message(message):
         print(f"Processing image: {image_id}")
         
         try:
-            # Process the image (resize, watermark, content detection)
             processing_result = await process_image(image_id)
-            
-            # Publish to processed exchange
             await publish_processed_event(image_id, processing_result)
             
         except Exception as e:
             print(f"Error processing image {image_id}: {str(e)}")
-            # In a real scenario, you might want to implement retry logic here
 
 async def publish_processed_event(image_id: str, result: dict):
     connection = await get_connection()
@@ -47,21 +43,17 @@ async def publish_processed_event(image_id: str, result: dict):
 async def main():
     connection = await get_connection()
     channel = await connection.channel()
-    
-    # Configure prefetch for load balancing
     await channel.set_qos(prefetch_count=1)
     
-    # Declare processing queue
     queue = await channel.declare_queue(
         PROCESSING_QUEUE,
         durable=True
     )
     
-    # Start consuming
     await queue.consume(on_message)
     
     print("Worker started. Waiting for messages...")
-    await asyncio.Future()  # run forever
+    await asyncio.Future()
 
 if __name__ == "__main__":
     asyncio.run(main())

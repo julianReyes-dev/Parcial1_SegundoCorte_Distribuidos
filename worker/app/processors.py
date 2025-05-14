@@ -10,11 +10,9 @@ PROCESSED_DIR = "processed"
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
 async def process_image(image_id: str) -> Dict:
-    # Simulate processing time
     await asyncio.sleep(random.uniform(1, 3))
     
     try:
-        # Find the original file
         original_path = None
         for ext in ['jpg', 'jpeg', 'png', 'gif']:
             path = f"{UPLOAD_DIR}/{image_id}.{ext}"
@@ -25,21 +23,18 @@ async def process_image(image_id: str) -> Dict:
         if not original_path:
             raise FileNotFoundError("Original image not found")
         
-        # Open image
+        # Open imagen
         img = Image.open(original_path)
         
         # 1. Resize
         img.thumbnail((800, 800))
         
-        # 2. Add watermark
         draw = ImageDraw.Draw(img)
         font = ImageFont.load_default()
         draw.text((10, 10), "SAMPLE WATERMARK", (255, 255, 255), font=font)
         
-        # 3. Content detection (simulated)
         content_tags = detect_content_simulated(img)
         
-        # Save processed image
         processed_path = f"{PROCESSED_DIR}/{image_id}.jpg"
         img.save(processed_path, "JPEG")
         
@@ -58,7 +53,6 @@ async def process_image(image_id: str) -> Dict:
         }
 
 def detect_content_simulated(img) -> list:
-    # Simulate content detection
     tags = []
     if random.random() > 0.7:
         tags.append("nature")
