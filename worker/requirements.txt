@@ -1,0 +1,2 @@
+aio-pika==9.1.1
+Pillow==9.5.0
