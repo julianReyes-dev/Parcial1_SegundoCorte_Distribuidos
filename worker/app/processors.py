@@ -1,6 +1,6 @@
-import os
-import time
+import asyncio
 import random
+import os
 from PIL import Image, ImageDraw, ImageFont
 from typing import Dict
 
@@ -23,12 +23,12 @@ async def process_image(image_id: str) -> Dict:
         if not original_path:
             raise FileNotFoundError("Original image not found")
         
-        # Open imagen
         img = Image.open(original_path)
         
-        # 1. Resize
+        # Tamaño
         img.thumbnail((800, 800))
         
+        # Marca de agua
         draw = ImageDraw.Draw(img)
         font = ImageFont.load_default()
         draw.text((10, 10), "SAMPLE WATERMARK", (255, 255, 255), font=font)
